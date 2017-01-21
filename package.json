@@ -1,0 +1,23 @@
+{
+  "name": "example-electron",
+  "version": "1.0.0",
+  "description": "electron desktop application example",
+  "main": "src/electron/main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "electron ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://noygal@github.com/noygal/example-electron.git"
+  },
+  "author": "Gal Noy",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/noygal/example-electron/issues"
+  },
+  "homepage": "https://github.com/noygal/example-electron#readme",
+  "dependencies": {
+    "electron": "^1.4.15"
+  }
+}
