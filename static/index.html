@@ -10,10 +10,19 @@
     We are using Node.js <script>document.write(process.versions.node)</script>,
     Chromium <script>document.write(process.versions.chrome)</script>,
     and Electron <script>document.write(process.versions.electron)</script>.
+    <div>
+      count:
+      <span id="count">
+      </span>
+    </div>
   </body>
 
   <script>
-    // You can also require other files to run in this process
-    require('./renderer.js')
+    const {ipcRenderer} = require('electron')
+    function updateCount(event, arg) {
+      document.getElementById('count').innerText = arg
+    }
+    ipcRenderer.on('res-count', updateCount)
+    ipcRenderer.send('req-count')
   </script>
 </html>

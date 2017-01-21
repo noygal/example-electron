@@ -50,25 +50,6 @@ npm start
 
 ## Step 2
 
-### Dev workflow
-
-Relaunch electron on code changes.
-
-```bash
-npm i -D watch
-```
-
-Add the relaunch script to `package.json` file:
-```json
-{
-  ...
-  "scripts": {
-    "dev": "watch npm start src/electron/**/*"
-  },
-  ...
-}
-```
-
 ### Packaging
 Fast and easy application packaging can be done with the help of [electron-packager](https://github.com/electron-userland/electron-packager),
 you can check all the build options [here](https://github.com/electron-userland/electron-packager/blob/master/docs/api.md).
@@ -131,3 +112,90 @@ and ["build"](https://github.com/electron-userland/electron-builder/wiki/Options
 - There are a lot of platform specific related configuration, test every changes before distributing.
 - [Auto update](https://github.com/electron-userland/electron-builder/wiki/Auto-Update) is baked in (need to be configure).
 - There a [docker](https://github.com/electron-userland/electron-builder/wiki/Docker) option for linux and windows.
+
+## Step 3
+
+Lets build a menubar application, the menu runs on the main process and the UI on the render process,
+so we'll to do some communication between those two.
+
+#### Install dependencies
+[menubar](https://github.com/maxogden/menubar) is a library for menubar application development.
+```json
+npm i -S menubar
+```
+
+#### Add the menubar init/render files
+
+`src/electron/menubar.js`
+```js
+const menubar = require('menubar')
+const path = require('path')
+const url = require('url')
+
+const mb = menubar({
+  index: url.format({
+    pathname: path.join(__dirname, '../../static/menubar.html'),
+    protocol: 'file:',
+    slashes: true
+  })
+})
+
+mb.on('ready', function ready () {
+  console.log('app is ready')
+  // your app code here
+})
+
+```
+
+`static/menubar.html`
+```html
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Hello World!</title>
+  </head>
+  <body>
+    <button onclick="addCount()">Add count</button>
+  </body>
+
+  <script>
+    const {ipcRenderer} = require('electron')
+    function addCount () {
+      ipcRenderer.send('add-count')
+    }
+  </script>
+</html>
+```
+#### Add communication logic to main/render processes
+`src/electron/menubar.js`
+```js
+require('./menubar')
+
+const {ipcMain} = require('electron')
+
+let count = 0;
+
+ipcMain.on('add-count', (event, arg) => {
+  count++
+  mainWindow.webContents.send('res-count', count)
+})
+
+ipcMain.on('req-count', (event, arg) => {
+  event.sender.send('res-count', count)
+})
+```
+
+`static/index.html`
+```html
+...
+  <script>
+    const {ipcRenderer} = require('electron')
+    function updateCount(event, arg) {
+      document.getElementById('count').innerText = arg
+    }
+    ipcRenderer.on('res-count', updateCount)
+    ipcRenderer.send('req-count')
+  </script>
+...
+```

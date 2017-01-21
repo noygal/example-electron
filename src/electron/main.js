@@ -58,3 +58,18 @@ app.on('activate', function () {
 
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and require them here.
+
+require('./menubar')
+
+const {ipcMain} = require('electron')
+
+let count = 0;
+
+ipcMain.on('add-count', (event, arg) => {
+  count++
+  mainWindow.webContents.send('res-count', count)
+})
+
+ipcMain.on('req-count', (event, arg) => {
+  event.sender.send('res-count', count)
+})

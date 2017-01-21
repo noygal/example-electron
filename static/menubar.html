@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Hello World!</title>
+  </head>
+  <body>
+    <button onclick="addCount()">Add count</button>
+  </body>
+
+  <script>
+    const {ipcRenderer} = require('electron')
+    function addCount () {
+      ipcRenderer.send('add-count')
+    }
+  </script>
+</html>
