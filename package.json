@@ -5,19 +5,39 @@
   "main": "src/electron/main.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "electron ."
+    "start": "electron .",
+    "dev": "watch 'npm start' src/electron",
+    "clean": "rm -rf dist",
+    "pack": "electron-packager . --overwrite --out dist/pack",
+    "pack:all": "electron-packager . --platform=darwin,linux,win32 --arch=x64 --overwrite --out dist/pack",
+    "build": "build",
+    "build:all": "build --mac --win --linux --x64"
   },
   "repository": {
     "type": "git",
     "url": "git+https://noygal@github.com/noygal/example-electron.git"
   },
-  "author": "Gal Noy",
+  "author": {
+    "name": "Gal Noy",
+    "email": "gal@tikalk.com"
+  },
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/noygal/example-electron/issues"
   },
   "homepage": "https://github.com/noygal/example-electron#readme",
   "dependencies": {
-    "electron": "^1.4.15"
+  },
+  "devDependencies": {
+    "electron": "^1.4.15",
+    "electron-builder": "^11.4.4",
+    "electron-packager": "^8.5.0",
+    "watch": "^1.0.1"
+  },
+  "build": {
+    "appId": "com.electron.example-electron",
+    "directories": {
+      "output": "dist/build"
+    }
   }
 }
