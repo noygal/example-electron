@@ -199,3 +199,12 @@ ipcMain.on('req-count', (event, arg) => {
   </script>
 ...
 ```
+
+## For slim js lecture
+
+```bash
+npm i -S bootstrap jquery slim-js
+mkdir src/app
+curl https://raw.githubusercontent.com/eavichay/slim-electron-boilerplate/master/src/app/app.js -o src/app/app.js
+curl https://raw.githubusercontent.com/eavichay/slim-electron-boilerplate/master/static/index.html -o static/index.html
+```
