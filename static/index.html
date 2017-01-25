@@ -2,14 +2,27 @@
 <html>
   <head>
     <meta charset="UTF-8">
-    <title>Slim is awesome</title>
-    <script src="../node_modules/slim-js/Slim.js"></script>
-    <link rel="stylesheet" href="../node_modules/bootstrap/dist/css/bootstrap.css" />
-      <script>
-    require('../src/app/app.js')
-  </script>
+    <title>Hello World!</title>
   </head>
   <body>
-    <slim-app></slim-app>
+    <h1>Hello World!</h1>
+    <!-- All of the Node.js APIs are available in this renderer process. -->
+    We are using Node.js <script>document.write(process.versions.node)</script>,
+    Chromium <script>document.write(process.versions.chrome)</script>,
+    and Electron <script>document.write(process.versions.electron)</script>.
+    <div>
+      count:
+      <span id="count">
+      </span>
+    </div>
   </body>
+
+  <script>
+    const {ipcRenderer} = require('electron')
+    function updateCount(event, arg) {
+      document.getElementById('count').innerText = arg
+    }
+    ipcRenderer.on('res-count', updateCount)
+    ipcRenderer.send('req-count')
+  </script>
 </html>
